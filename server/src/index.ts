@@ -20,7 +20,7 @@ const app = express();
 
 // Security headers with resource policy allowing static images to load in frontend
 app.use(
-  helmet({
+  (helmet as any)({
     crossOriginResourcePolicy: { policy: 'cross-origin' },
   })
 );
