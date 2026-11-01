@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --board-bg: #f3efe6;
+  --cork-dot: #e4dbc8;
+}
+
+body {
+  background-color: var(--board-bg);
+  background-image: 
+    radial-gradient(#e5dcce 1.2px, transparent 1.2px),
+    radial-gradient(#ded4c4 1.2px, var(--board-bg) 1.2px);
+  background-size: 28px 28px;
+  background-position: 0 0, 14px 14px;
+  color: #191512;
+  font-family: var(--font-dm-sans), sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Accessible focus outline */
+*:focus-visible {
+  outline: 2px solid #d4421e;
+  outline-offset: 2px;
+}
+
+/* Washi tape strip effect */
+.washi-tape {
+  background: rgba(246, 238, 222, 0.85);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(1px);
+  position: absolute;
+  height: 14px;
+  width: 58px;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  border-left: 2px dashed rgba(200, 185, 160, 0.6);
+  border-right: 2px dashed rgba(200, 185, 160, 0.6);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.washi-tape-angle {
+  transform: translateX(-50%) rotate(2.5deg);
+}
+
+/* Distressed Rubber Stamp */
+.rubber-stamp {
+  font-family: var(--font-fraunces), serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #dc2626;
+  border: 3px double #dc2626;
+  padding: 4px 16px;
+  border-radius: 4px;
+  mask-image: radial-gradient(circle, black 70%, rgba(0, 0, 0, 0.7) 100%);
+  display: inline-block;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Hand-drawn squiggle underline */
+.squiggle-underline {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 4'%3E%3Cpath fill='none' stroke='%23D4421E' stroke-width='1.5' d='M0 3.5c5 0 5-3 10-3s5 3 10 3 5-3 10-3 5 3 10 3'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: bottom;
+  background-size: 18px 4px;
+  padding-bottom: 4px;
+}
+
+/* Index card paper border & texture */
+.paper-card {
+  background: #fcfbf8;
+  border: 1px solid #dcd3c4;
+  box-shadow: 0 4px 12px -2px rgba(25, 21, 18, 0.08), 0 1px 3px rgba(25, 21, 18, 0.05);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+}
+
+.paper-card:hover {
+  transform: translateY(-4px) rotate(0deg) !important;
+  box-shadow: 0 14px 28px -4px rgba(25, 21, 18, 0.14), 0 4px 10px -2px rgba(25, 21, 18, 0.08);
+}
+
+/* Support prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .paper-card,
+  .paper-card:hover,
+  .washi-tape,
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+}
+
+/* Sticky Note Toast */
+.sticky-toast {
+  background: #fef08a;
+  border-bottom-right-radius: 18px;
+  box-shadow: 2px 8px 20px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+.sticky-toast::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 18px 18px;
+  border-color: transparent transparent #eab308 transparent;
+  filter: drop-shadow(-1px -1px 1px rgba(0,0,0,0.15));
+}
