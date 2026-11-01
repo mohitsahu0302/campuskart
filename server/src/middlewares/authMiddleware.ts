@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import { ENV } from '../config/env.js';
 import { AppError } from './errorMiddleware.js';
 
+const jwtLib: any = (jwt as any).default || jwt;
+
 export interface AuthUserPayload {
   userId: string;
   email: string;
@@ -41,7 +43,7 @@ export const requireAuth = (
   }
 
   try {
-    const decoded = jwt.verify(token, ENV.JWT_SECRET) as AuthUserPayload;
+    const decoded = jwtLib.verify(token, ENV.JWT_SECRET) as AuthUserPayload;
     req.user = decoded;
     next();
   } catch (err) {
@@ -60,7 +62,7 @@ export const optionalAuth = (
   }
 
   try {
-    const decoded = jwt.verify(token, ENV.JWT_SECRET) as AuthUserPayload;
+    const decoded = jwtLib.verify(token, ENV.JWT_SECRET) as AuthUserPayload;
     req.user = decoded;
   } catch (err) {
     // Silently ignore invalid token in optional auth

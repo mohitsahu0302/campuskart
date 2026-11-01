@@ -6,6 +6,9 @@ import { AppError } from '../middlewares/errorMiddleware.js';
 import { SignupInput, LoginInput } from '../validations/authValidation.js';
 import { AuthUserPayload } from '../middlewares/authMiddleware.js';
 
+const jwtLib: any = (jwt as any).default || jwt;
+const bcryptLib: any = (bcrypt as any).default || bcrypt;
+
 export const generateToken = (user: IUser): string => {
   const payload: AuthUserPayload = {
     userId: user._id.toString(),
@@ -13,7 +16,7 @@ export const generateToken = (user: IUser): string => {
     name: user.name,
     hostelArea: user.hostelArea,
   };
-  return jwt.sign(payload, ENV.JWT_SECRET, {
+  return jwtLib.sign(payload, ENV.JWT_SECRET, {
     expiresIn: '7d',
   });
 };
@@ -39,8 +42,8 @@ export const registerUser = async (data: SignupInput) => {
     throw new AppError('An account with this campus email already exists.', 409);
   }
 
-  const salt = await bcrypt.genSalt(10);
-  const passwordHash = await bcrypt.hash(data.password, salt);
+  const salt = await bcryptLib.genSalt(10);
+  const passwordHash = await bcryptLib.hash(data.password, salt);
 
   const user = await User.create({
     name: data.name,
@@ -64,7 +67,7 @@ export const authenticateUser = async (data: LoginInput) => {
     throw new AppError('Invalid campus email or password.', 401);
   }
 
-  const isMatch = await bcrypt.compare(data.password, user.passwordHash);
+  const isMatch = await bcryptLib.compare(data.password, user.passwordHash);
   if (!isMatch) {
     throw new AppError('Invalid campus email or password.', 401);
   }

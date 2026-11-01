@@ -5,6 +5,8 @@ import { Listing } from '../models/Listing.js';
 import { Report } from '../models/Report.js';
 import { ENV } from '../config/env.js';
 
+const bcryptLib: any = (bcrypt as any).default || bcrypt;
+
 const DEMO_USERS = [
   {
     name: 'Aravind Sharma',
@@ -514,11 +516,11 @@ async function seedDatabase() {
   ]);
 
   console.log('👤 Creating 3 demo campus users...');
-  const salt = await bcrypt.genSalt(10);
+  const salt = await bcryptLib.genSalt(10);
   const createdUsers = [];
 
   for (const u of DEMO_USERS) {
-    const passwordHash = await bcrypt.hash(u.password, salt);
+    const passwordHash = await bcryptLib.hash(u.password, salt);
     const user = await User.create({
       name: u.name,
       email: u.email,

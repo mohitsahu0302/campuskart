@@ -42,9 +42,15 @@ const allowedOrigins = [
   'http://127.0.0.1:3000',
 ];
 
+const corsFn: any = typeof cors === 'function' ? cors : (cors as any).default || cors;
+const cookieParserFn: any =
+  typeof cookieParser === 'function'
+    ? cookieParser
+    : (cookieParser as any).default || cookieParser;
+
 app.use(
-  cors({
-    origin: (origin, callback) => {
+  corsFn({
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
       // allow requests with no origin (like mobile apps, curl, or serverless rewrites)
       if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
         callback(null, true);
@@ -58,7 +64,7 @@ app.use(
   })
 );
 
-app.use(cookieParser());
+app.use(cookieParserFn());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
