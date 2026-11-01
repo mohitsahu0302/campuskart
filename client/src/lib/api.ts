@@ -26,6 +26,14 @@ async function fetcher<T>(
     headers.set('Content-Type', 'application/json');
   }
 
+  // Ensure JWT Authorization header is sent (survives cross-origin and third-party cookie blocking)
+  if (typeof window !== 'undefined' && !headers.has('Authorization')) {
+    const token = localStorage.getItem('campuskart_token');
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+  }
+
   const response = await fetch(url, {
     ...options,
     headers,

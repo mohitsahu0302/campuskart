@@ -6,11 +6,13 @@ import {
 import * as authService from '../services/authService.js';
 import { ENV } from '../config/env.js';
 
+const isProd = ENV.NODE_ENV === 'production' || process.env.VERCEL === '1';
+
 const COOKIE_NAME = 'token';
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: ENV.NODE_ENV === 'production',
-  sameSite: 'lax' as const,
+  secure: isProd,
+  sameSite: (isProd ? 'none' : 'lax') as 'none' | 'lax',
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 
@@ -62,8 +64,8 @@ export const logout = async (
   try {
     res.clearCookie(COOKIE_NAME, {
       httpOnly: true,
-      sameSite: 'lax',
-      secure: ENV.NODE_ENV === 'production',
+      sameSite: (isProd ? 'none' : 'lax') as 'none' | 'lax',
+      secure: isProd,
     });
 
     res.status(200).json({

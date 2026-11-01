@@ -100,6 +100,7 @@ export function ImageUploadDropzone({
               src={imgUrl}
               alt={`Preview ${idx + 1}`}
               fill
+              unoptimized
               sizes="120px"
               className="object-cover"
             />

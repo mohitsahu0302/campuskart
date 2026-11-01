@@ -30,6 +30,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSavedListings(res.data.user.savedListings || []);
       }
     } catch (err) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('campuskart_token');
+      }
       setUser(null);
       setSavedListings([]);
     } finally {
@@ -44,6 +47,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (credentials: { email: string; password: string }) => {
     const res = await authApi.login(credentials);
     if (res.success && res.data.user) {
+      if (res.data.token && typeof window !== 'undefined') {
+        localStorage.setItem('campuskart_token', res.data.token);
+      }
       setUser(res.data.user);
       setSavedListings(res.data.user.savedListings || []);
     }
@@ -52,6 +58,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async (userData: any) => {
     const res = await authApi.signup(userData);
     if (res.success && res.data.user) {
+      if (res.data.token && typeof window !== 'undefined') {
+        localStorage.setItem('campuskart_token', res.data.token);
+      }
       setUser(res.data.user);
       setSavedListings(res.data.user.savedListings || []);
     }
@@ -61,6 +70,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await authApi.logout();
     } finally {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('campuskart_token');
+      }
       setUser(null);
       setSavedListings([]);
     }
