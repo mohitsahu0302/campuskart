@@ -1,7 +1,12 @@
 import multer from 'multer';
 import { AppError } from './errorMiddleware.js';
 
-const storage = multer.memoryStorage();
+const multerFn: any =
+  typeof multer === 'function' ? multer : (multer as any).default || multer;
+
+const storage = multerFn.memoryStorage
+  ? multerFn.memoryStorage()
+  : (multer as any).memoryStorage();
 
 const fileFilter = (
   _req: any,
@@ -27,7 +32,7 @@ const fileFilter = (
   }
 };
 
-export const upload = multer({
+export const upload = multerFn({
   storage,
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB limit

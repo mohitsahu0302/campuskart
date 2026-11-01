@@ -1,6 +1,11 @@
 import rateLimit from 'express-rate-limit';
 
-export const authRateLimiter = rateLimit({
+const createRateLimiter: any =
+  typeof rateLimit === 'function'
+    ? rateLimit
+    : (rateLimit as any).default || rateLimit;
+
+export const authRateLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 30, // 30 attempts per 15 minutes
   message: {
@@ -11,7 +16,7 @@ export const authRateLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-export const apiRateLimiter = rateLimit({
+export const apiRateLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
   max: 300,
   message: {
